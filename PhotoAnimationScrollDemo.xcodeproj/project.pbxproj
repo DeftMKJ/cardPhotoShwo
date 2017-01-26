@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1DC15C295A15344DC14F9CA8 /* libPods-PhotoAnimationScrollDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8003311C46F6A739AA5932C /* libPods-PhotoAnimationScrollDemo.a */; };
+		693D2A101E3A22D900F1101C /* MKJCircleLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 693D2A0F1E3A22D900F1101C /* MKJCircleLayout.m */; };
+		693D2A131E3A263900F1101C /* MKJOverLayLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 693D2A121E3A263900F1101C /* MKJOverLayLayout.m */; };
 		B105EC181D5ABF01003503C3 /* MKJConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = B105EC171D5ABF01003503C3 /* MKJConstant.m */; };
 		B105EC241D5AE10A003503C3 /* 4.png in Resources */ = {isa = PBXBuildFile; fileRef = B105EC1D1D5AE10A003503C3 /* 4.png */; };
 		B105EC251D5AE10A003503C3 /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = B105EC1E1D5AE10A003503C3 /* 5.png */; };
@@ -57,6 +59,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		693D2A0E1E3A22D900F1101C /* MKJCircleLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKJCircleLayout.h; sourceTree = "<group>"; };
+		693D2A0F1E3A22D900F1101C /* MKJCircleLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKJCircleLayout.m; sourceTree = "<group>"; };
+		693D2A111E3A263900F1101C /* MKJOverLayLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKJOverLayLayout.h; sourceTree = "<group>"; };
+		693D2A121E3A263900F1101C /* MKJOverLayLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKJOverLayLayout.m; sourceTree = "<group>"; };
 		767E7BAB2AF729F9CD1F2DFF /* Pods-PhotoAnimationScrollDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoAnimationScrollDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoAnimationScrollDemo/Pods-PhotoAnimationScrollDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		909D6FB219EEB55ACDF1EB90 /* Pods-PhotoAnimationScrollDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoAnimationScrollDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoAnimationScrollDemo/Pods-PhotoAnimationScrollDemo.release.xcconfig"; sourceTree = "<group>"; };
 		A8003311C46F6A739AA5932C /* libPods-PhotoAnimationScrollDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PhotoAnimationScrollDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -216,6 +222,10 @@
 				B1F1C5741D59753000BD2B40 /* MKJCollectionViewCell.xib */,
 				B1E4396A1D59F6DD00383933 /* MKJCollectionViewFlowLayout.h */,
 				B1E4396B1D59F6DD00383933 /* MKJCollectionViewFlowLayout.m */,
+				693D2A0E1E3A22D900F1101C /* MKJCircleLayout.h */,
+				693D2A0F1E3A22D900F1101C /* MKJCircleLayout.m */,
+				693D2A111E3A263900F1101C /* MKJOverLayLayout.h */,
+				693D2A121E3A263900F1101C /* MKJOverLayLayout.m */,
 				B1E4396D1D59F6F700383933 /* MKJItemModel.h */,
 				B1E4396E1D59F6F700383933 /* MKJItemModel.m */,
 				B1E439701D59F72A00383933 /* MKJMainPopoutView.h */,
@@ -466,6 +476,8 @@
 				B1F1C53B1D5972D000BD2B40 /* AppDelegate.m in Sources */,
 				B1E4396F1D59F6F700383933 /* MKJItemModel.m in Sources */,
 				B1F1C5751D59753000BD2B40 /* MKJCollectionViewCell.m in Sources */,
+				693D2A101E3A22D900F1101C /* MKJCircleLayout.m in Sources */,
+				693D2A131E3A263900F1101C /* MKJOverLayLayout.m in Sources */,
 				B1E439721D59F72A00383933 /* MKJMainPopoutView.m in Sources */,
 				B1F1C5701D5974F400BD2B40 /* NSArray+Extension.m in Sources */,
 				B1E4396C1D59F6DD00383933 /* MKJCollectionViewFlowLayout.m in Sources */,

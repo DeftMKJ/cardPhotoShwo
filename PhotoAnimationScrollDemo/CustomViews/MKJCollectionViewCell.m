@@ -14,7 +14,10 @@
     [super awakeFromNib];
     self.heroImageVIew.layer.cornerRadius = 5.0f;
     self.heroImageVIew.layer.masksToBounds = YES;
-    self.backView.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.backView.backgroundColor = [UIColor clearColor];
+    self.contentView.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = [UIColor clearColor];
+    self.backView.layer.shadowColor = [UIColor redColor].CGColor;
     self.backView.layer.shadowOpacity = 0.7;
     self.backView.layer.shadowRadius = 5.0f;
     self.backView.layer.shadowOffset = CGSizeMake(2, 6);

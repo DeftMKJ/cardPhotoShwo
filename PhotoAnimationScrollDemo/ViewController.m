@@ -90,7 +90,7 @@
         for (NSInteger i = 0; i < 11; i ++) {
             MKJItemModel *model = [[MKJItemModel alloc] init];
             model.imageName = [NSString stringWithFormat:@"%zd",i];
-            model.titleName = [NSString stringWithFormat:@"第%zd张",i];
+            model.titleName = [NSString stringWithFormat:@"原来第%zd张",i];
             [_dataSource addObject:model];
         }
     }

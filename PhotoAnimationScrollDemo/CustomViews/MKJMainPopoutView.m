@@ -15,6 +15,8 @@
 #import "MKJCollectionViewFlowLayout.h"
 #import "MKJItemModel.h"
 #import <UIImageView+WebCache.h>
+#import "MKJCircleLayout.h"
+#import "MKJOverLayLayout.h"
 
 @interface MKJMainPopoutView () <UICollectionViewDelegate,UICollectionViewDataSource,MKJCollectionViewFlowLayoutDelegate>
 
@@ -24,6 +26,11 @@
 @property (nonatomic,strong) UIButton *selectedButton;
 @property (nonatomic,strong) UIButton *closeButton;
 @property (nonatomic,assign) NSInteger selectedIndex; // 选择了哪个
+
+
+@property (nonatomic,strong) UIButton *transformLayoutButton;
+
+@property (nonatomic,strong) NSMutableArray *datas;
 @end
 
 static NSString *indentify = @"MKJCollectionViewCell";
@@ -46,6 +53,8 @@ static NSString *indentify = @"MKJCollectionViewCell";
                                      [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
     [superView addSubview:self];
     [self.underBackView.layer addAnimation:popAnimation forKey:nil];
+    
+    
 }
 
 // 初始化 设置背景颜色透明点，然后加载子视图
@@ -65,6 +74,7 @@ static NSString *indentify = @"MKJCollectionViewCell";
 {
     [self addSubview:self.underBackView];
     [self.underBackView addSubview:self.collectionView];
+    [self.underBackView addSubview:self.transformLayoutButton];
     [self.underBackView addSubview:self.nameLabel];
     [self.underBackView addSubview:self.selectedButton];
     [self.underBackView addSubview:self.closeButton];
@@ -91,6 +101,12 @@ static NSString *indentify = @"MKJCollectionViewCell";
         make.size.mas_equalTo(CGSizeMake(200, 45));
     }];
     
+    [self.transformLayoutButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.selectedButton);
+        make.bottom.equalTo(self.nameLabel.mas_top).with.offset(-20);
+        make.size.mas_equalTo(CGSizeMake(100, 30));
+    }];
+    
 }
 
 #pragma makr - collectionView delegate
@@ -100,12 +116,12 @@ static NSString *indentify = @"MKJCollectionViewCell";
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.dataSource.count;
+    return self.datas.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    MKJItemModel *model = self.dataSource[indexPath.item];
+    MKJItemModel *model = self.datas[indexPath.item];
     MKJCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:indentify forIndexPath:indexPath];
     cell.heroImageVIew.image = [UIImage imageNamed:model.imageName];
     return cell;
@@ -114,19 +130,33 @@ static NSString *indentify = @"MKJCollectionViewCell";
 // 点击item的时候
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGPoint pInUnderView = [self.underBackView convertPoint:collectionView.center toView:collectionView];
-    
-    // 获取中间的indexpath
-    NSIndexPath *indexpathNew = [collectionView indexPathForItemAtPoint:pInUnderView];
-    
-    if (indexPath.row == indexpathNew.row)
+    NSLog(@"%@",indexPath);
+    if ([self.collectionView.collectionViewLayout isKindOfClass:[MKJCollectionViewFlowLayout class]]) {
+        CGPoint pInUnderView = [self.underBackView convertPoint:collectionView.center toView:collectionView];
+        
+        // 获取中间的indexpath
+        NSIndexPath *indexpathNew = [collectionView indexPathForItemAtPoint:pInUnderView];
+        
+        if (indexPath.row == indexpathNew.row)
+        {
+            NSLog(@"点击了同一个");
+            return;
+        }
+        else
+        {
+            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        }
+    }
+    else if ([self.collectionView.collectionViewLayout isKindOfClass:[MKJCircleLayout class]])
     {
-        NSLog(@"点击了同一个");
-        return;
+        _selectedIndex = 0;
+        [self labelText:_selectedIndex];
+        [self.datas removeObjectAtIndex:indexPath.item];
+        [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
     }
     else
     {
-        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        
     }
 }
 
@@ -163,6 +193,47 @@ static NSString *indentify = @"MKJCollectionViewCell";
     return _nameLabel;
 }
 
+- (UIButton *)transformLayoutButton
+{
+    if (_transformLayoutButton == nil) {
+        _transformLayoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_transformLayoutButton setTitle:@"变身" forState:UIControlStateNormal];
+        [_transformLayoutButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _transformLayoutButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+        [_transformLayoutButton addTarget:self action:@selector(transformLayout) forControlEvents:UIControlEventTouchUpInside];
+        _transformLayoutButton.layer.cornerRadius = 10;
+        _transformLayoutButton.layer.borderColor = [UIColor whiteColor].CGColor;
+        _transformLayoutButton.layer.borderWidth = 2.0f;
+    }
+    return _transformLayoutButton;
+}
+
+- (void)transformLayout
+{
+    if ([self.collectionView.collectionViewLayout isKindOfClass:[MKJCollectionViewFlowLayout class]]) {
+        [self.collectionView setCollectionViewLayout:[[MKJCircleLayout alloc]init] animated:YES];
+        
+    }else if ([self.collectionView.collectionViewLayout isKindOfClass:[MKJCircleLayout class]])
+    {
+        [self.collectionView setCollectionViewLayout:[[MKJOverLayLayout alloc]init] animated:YES];
+        
+    }else
+    {
+        MKJCollectionViewFlowLayout *flow = [[MKJCollectionViewFlowLayout alloc] init];
+        flow.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        flow.itemSize = CGSizeMake(self.underBackView.width / 2, self.underBackView.width - 100);
+        flow.minimumLineSpacing = 30;
+        flow.minimumInteritemSpacing = 30;
+        flow.needAlpha = YES;
+        flow.delegate = self;
+        CGFloat oneX =self.underBackView.width / 4;
+        flow.sectionInset = UIEdgeInsetsMake(0, oneX, 0, oneX);
+        [self.collectionView setCollectionViewLayout:flow animated:YES];
+        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:_selectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
+    }
+    
+}
+
 - (UIButton *)selectedButton
 {
     if (_selectedButton == nil) {
@@ -180,7 +251,7 @@ static NSString *indentify = @"MKJCollectionViewCell";
 - (void)chooseDone:(UIButton *)button
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(selectedHero:)]) {
-        [self.delegate selectedHero:self.dataSource[_selectedIndex]];
+        [self.delegate selectedHero:self.datas[_selectedIndex]];
     }
 }
 
@@ -201,9 +272,6 @@ static NSString *indentify = @"MKJCollectionViewCell";
         [self.delegate closePopView];
     }
 }
-
-
-
 
 - (UICollectionView *)collectionView
 {
@@ -241,6 +309,7 @@ static NSString *indentify = @"MKJCollectionViewCell";
 - (void)setDataSource:(NSArray *)dataSource
 {
     _dataSource = dataSource;
+    self.datas = [[NSMutableArray alloc] initWithArray:self.dataSource];
     [self labelText:0];
     [self.collectionView reloadData];
 }
@@ -248,11 +317,9 @@ static NSString *indentify = @"MKJCollectionViewCell";
 // 给指定的label赋值
 - (void)labelText:(NSInteger)idx
 {
-    MKJItemModel *model = self.dataSource[idx];
+    MKJItemModel *model = self.datas[idx];
     self.nameLabel.text = model.titleName;
 }
-
-
 
 
 
